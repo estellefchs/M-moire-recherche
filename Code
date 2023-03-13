@@ -17,36 +17,21 @@ label list URBRURAL
 
 label list V55
 
+*Renommer les variables d'intérêt
+rename v55 glass
+rename v60 product
+
+*Créer un index de sensibilité environnementale avec 2 variables
 gen index =.
-replace index= 1 if v55==4
-replace index= 2 if v55==3
-replace index= 3 if v55==2
-replace index= 4 if v55==1
+replace index= 1 if glass==4
+replace index= 2 if glass==3
+replace index= 3 if glass==2
+replace index= 4 if glass==1
 
-replace index= index+1 if v56==4
-replace index= index+2 if v56==3
-replace index= index+3 if v56==2
-replace index= index+4 if v56==1
-
-replace index= index+1 if v57==4
-replace index= index+2 if v57==3
-replace index= index+3 if v57==2
-replace index= index+4 if v57==1
-
-replace index= index+1 if v58==4
-replace index= index+2 if v58==3
-replace index= index+3 if v58==2
-replace index= index+4 if v58==1
-
-replace index= index+1 if v59==4
-replace index= index+2 if v59==3
-replace index= index+3 if v59==2
-replace index= index+4 if v59==1
-
-replace index= index+1 if v60==4
-replace index= index+2 if v60==3
-replace index= index+3 if v60==2
-replace index= index+4 if v60==1
+replace index= index+1 if product==4
+replace index= index+2 if product==3
+replace index= index+3 if product==2
+replace index= index+4 if product==1
 
 
 reg index URBRURAL AGE SEX
