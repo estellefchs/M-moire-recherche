@@ -75,6 +75,7 @@ v401 v402 v403 v405 v406 v407 v408 v409 v410 v411 v412 v413 v414 v415 v416 v417 
  
 *Renommer les variables d'intérêt
 rename v3 country
+reame v380 DE_REG
 rename v52 glass
 rename v53 product
 rename v65 URBRURAL
