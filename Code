@@ -46,6 +46,15 @@ ________________
 label list V3
 keep if v3==2 | v3==3
 
+*Moyenne d'age
+mean v201
+
+*Genre
+tab v200
+
+*Régions
+tab v380
+
 *Retirer les variables inutiles
 drop v1 v2
 
