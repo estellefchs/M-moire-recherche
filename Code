@@ -19,19 +19,25 @@ label list V55
 
 *Renommer les variables d'intérêt
 rename v55 glass
-rename v60 product
+rename v56 fruit
+rename v57 driving
 
-*Créer un index de sensibilité environnementale avec 2 variables
+*Créer un index de sensibilité environnementale avec 3 variables
 gen index =.
 replace index= 1 if glass==4
 replace index= 2 if glass==3
 replace index= 3 if glass==2
 replace index= 4 if glass==1
 
-replace index= index+1 if product==4
-replace index= index+2 if product==3
-replace index= index+3 if product==2
-replace index= index+4 if product==1
+replace index= index+1 if fruit==4
+replace index= index+2 if fruit==3
+replace index= index+3 if fruit==2
+replace index= index+4 if fruit==1
+
+replace index= index+1 if driving==4
+replace index= index+2 if driving==3
+replace index= index+3 if driving==2
+replace index= index+4 if driving==1
 
 *Créer une variable binaire (1 si Est, 0 si Ouest)
 gen Est=0
@@ -42,6 +48,20 @@ WRKSUP UNION DE_INC NSUP DE_RELIG MARITAL TYPORG1 RELIGGRP SEX TYPORG2 ATTEND DE
 
 *Sauvergarder la base nettoyée
 save Base1_cleaned, replace
+
+*STATISTIQUES DESCRIPTIVES
+
+*Regarder le lien entre la variable URBRURAL et la variable index sans prendre en compte la pondération en 2010
+tabulate URBRURAL, summarize (index)
+
+*Faire un tableau statistique pour observer la relation entre les sensibilité et urbanité
+graph hbar index, over(URBRURAL, sort(order)) ytitle("Index de sensibilité") title("Moyenne de l'index selon le degré d'urbanité" , size(medium)) blabel(bar, format(%9.0g))
+
+*Faire un tableau statistique pour observer la relation entre sensibilité et vivre à l'Est
+graph hbar index, over(Est, sort(order)) ytitle("Index de sensibilité") title("Moyenne de l'index selon l'Est" , size(medium)) blabel(bar, format(%9.0g))
+
+*Boîtes à moustache
+graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
 
 ________________
 *Base de 1993
@@ -76,8 +96,9 @@ v401 v402 v403 v405 v406 v407 v408 v409 v410 v411 v412 v413 v414 v415 v416 v417 
 *Renommer les variables d'intérêt
 rename v3 country
 reame v380 DE_REG
-rename v52 glass
-rename v53 product
+rename v56 glass
+rename v57 fruit
+rename v59 driving
 rename v65 URBRURAL
 
 *Sauvegarder la base nettoyée
@@ -91,21 +112,31 @@ replace index= 2 if glass==3
 replace index= 3 if glass==2
 replace index= 4 if glass==1
 
-replace index= index+1 if product==4
-replace index= index+2 if product==3
-replace index= index+3 if product==2
-replace index= index+4 if product==1
+replace index= index+1 if fruit==4
+replace index= index+2 if fruit==3
+replace index= index+3 if fruit==2
+replace index= index+4 if fruit==1
+
+replace index= index+1 if driving==4
+replace index= index+2 if driving==3
+replace index= index+3 if driving==2
+replace index= index+4 if driving==1
+
 
 *STATISTIQUES DESCRIPTIVES
 *Regarder le lien entre la variable URBRURAL et la variable index sans prendre en compte la pondération en 2010
 tabulate URBRURAL, summarize (index)
 
-*Faire un tableau statistique pour observer la relation entre les 2 variables
+*Faire un graphique pour observer la relation entre les 2 variables (sensibilité et urbanité)
 graph hbar index, over(URBRURAL, sort(order)) ytitle("Index de sensibilité") title("Moyenne de l'index selon le degré d'urbanité" , size(medium)) blabel(bar, format(%9.0g))
 
+*Faire un graphique pour observer la relation entre Est et sensibilité
+graph hbar index, over(Est, sort(order)) ytitle("Index de sensibilité") title("Moyenne de l'index selon l'Est" , size(medium)) blabel(bar, format(%9.0g))
 
 *Boîtes à moustache
 graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
+
+
 
 
 
