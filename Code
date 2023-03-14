@@ -22,6 +22,9 @@ rename v55 glass
 rename v56 fruit
 rename v57 driving
 
+*Générer une variable année
+gen year = "2000"
+
 *Créer un index de sensibilité environnementale avec 3 variables
 gen index =.
 replace index= 1 if glass==4
@@ -65,6 +68,9 @@ graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
 
 ________________
 *Base de 1993
+
+*Générer une variable qui donne l'année
+gen year= "1993"
 
 label list V3
 keep if v3==2 | v3==3
@@ -138,6 +144,9 @@ graph hbar index, over(Est, sort(order)) ytitle("Index de sensibilité") title("
 
 *Boîtes à moustache
 graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
+
+*MERGING DES 2 BASES
+append using Base1_cleaned
 
 
 
