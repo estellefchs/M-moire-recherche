@@ -161,6 +161,9 @@ append using Base1_cleaned
 *Régression avec effets année
 reg index i.URBRURAL i.year2 i.URBRURAL##i.year2
 
+*Exporter le tableau de régression
+outreg2 using myreg.doc, replace ctitle (Model1)
+
 
 
 
