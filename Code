@@ -66,6 +66,10 @@ graph hbar index, over(Est, sort(order)) ytitle("Index de sensibilité") title("
 *Boîtes à moustache
 graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
 
+*REGRESSION
+
+reg index URBRURAL 
+
 ________________
 *Base de 1993
 
@@ -147,6 +151,12 @@ graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
 
 *MERGING DES 2 BASES
 append using Base1_cleaned
+
+*REGRESSION AVEC INTERACTION
+*Régression avec effets année
+reg index i.URBRURAL i.year i.URBRURAL##i.year
+
+
 
 
 
