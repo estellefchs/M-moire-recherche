@@ -137,9 +137,8 @@ replace Est=1 if DE_REG==11 | DE_REG==12 | DE_REG==13 | DE_REG==15 | DE_REG==14 
 
 
 *Pour téléchagrer des tabulate ou autre
+ssc install asdoc
 asdoc tab URBRURAL, replace
-
-adoc table glass
 
 
 
