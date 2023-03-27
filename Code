@@ -24,6 +24,7 @@ rename v57 driving
 
 *Générer une variable année
 gen year = "2010"
+destring year, gen(year2)
 
 *Créer un index de sensibilité environnementale avec 3 variables
 gen index =.
