@@ -1,9 +1,4 @@
-cd "/Users/estellefuchs/Library/Mobile Documents/com~apple~Pages/Documents/Recherche Econométrie L3/Mémoire/données.dta"
-
-
-use "/Users/estellefuchs/Library/Mobile Documents/com~apple~Pages/Documents/Recherche Econométrie L3/Mémoire/données.dta/données2010.dta" 
-
-________________
+_______________
 *Base de 2010
 
 keep if c_alphan == "DE"
@@ -25,6 +20,7 @@ rename v57 driving
 *Générer une variable année
 gen year = "2010"
 destring year, gen(year2)
+
 
 *Créer un index de sensibilité environnementale avec 3 variables
 gen index =.
@@ -53,6 +49,8 @@ WRKSUP UNION DE_INC NSUP DE_RELIG MARITAL TYPORG1 RELIGGRP SEX TYPORG2 ATTEND DE
 *Sauvergarder la base nettoyée
 save données2010_cleaned, replace
 
+
+
 *STATISTIQUES DESCRIPTIVES
 
 *Regarder le lien entre la variable URBRURAL et la variable index sans prendre en compte la pondération en 2010
@@ -67,9 +65,22 @@ graph hbar index, over(Est, sort(order)) ytitle("Index de sensibilité") title("
 *Boîtes à moustache
 graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
 
+
+
+*VARIABLES DE CONTROLE
+
+label list EDUCYRS
+*Lorsqu'on regarde la variable EDUCYRS donc le nombre d'années d'éducation, on se rend compte que les valeurs supérieures ou égales à 95 signifient que la personne est encore à l'école ou qu'elle n'a pas répondu
+label list DE_RIC
+*Lorsqu'on regarde la variable DE_RINC donc le revenu personnel, on se rend compte que les valeurs supérieures à 10 000 signifient que la personne n'a pas répondu
+*Nous pouvons donc exclure de nos régressions ces valeurs
+
+
+
+
 *REGRESSION
 
-reg index URBRURAL 
+asdoc reg index i.URBRURAL SEX AGE EDUCYRS DE_RINC if EDUCYRS<95 & DE_RINC<10001
 
 ________________
 *Base de 1993
@@ -82,7 +93,9 @@ gen year= "1993"
 *Mettre la variable année au bon format
 destring year, gen(year2)
 *Générer une variable qui donne l'année de naissance
-gen BIRTH = 1993 - v201
+gen BIRTH1993 = 1993 - v201
+
+
 
 label list V3
 keep if v3==2 | v3==3
@@ -138,6 +151,7 @@ replace Est=1 if DE_REG==11 | DE_REG==12 | DE_REG==13 | DE_REG==15 | DE_REG==14 
 
 *Pour téléchagrer des tabulate ou autre
 ssc install asdoc
+
 asdoc tab URBRURAL, replace
 
 
@@ -160,10 +174,6 @@ graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
 *MERGING DES 2 BASES
 append using données2010_cleaned
 
-*Sauvegarder la base merged
-save Base_merged, replace
-dir
-
 
 *REGRESSION AVEC INTERACTION
 
@@ -173,5 +183,19 @@ reg index i.URBRURAL i.year2 i.URBRURAL##i.year2
 *Exporter le tableau de régression
 outreg2 using myreg.doc, replace ctitle (Model1)
 
-*Régression avec effets cohortes
+
+
+
+---------
+
+*GENERATIONS 
+
+gen generation = 0
+replace generation = 4 if BIRTH>1977 | BIRTH1993>1977
+replace generation = 1 if BIRTH<=1927 | BIRTH1993<=1927
+replace generation = 2 if BIRTH>1927 & BIRTH<=1952 | BIRTH1993>1927 & BIRTH1993<=1952
+replace generation = 3 if BIRTH>1952 & BIRTH<=1977 | BIRTH1993>1952 & BIRTH1993<=1977
+
+
+
 
