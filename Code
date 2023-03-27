@@ -82,7 +82,7 @@ gen year= "1993"
 *Mettre la variable année au bon format
 destring year, gen(year2)
 *Générer une variable qui donne l'année de naissance
-gen naissance = 1993 - v201
+gen BIRTH = 1993 - v201
 
 label list V3
 keep if v3==2 | v3==3
