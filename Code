@@ -81,6 +81,8 @@ use "/Users/estellefuchs/Library/Mobile Documents/com~apple~Pages/Documents/Rech
 gen year= "1993"
 *Mettre la variable année au bon format
 destring year, gen(year2)
+*Générer une variable qui donne l'année de naissance
+gen naissance = 1993 - v201
 
 label list V3
 keep if v3==2 | v3==3
@@ -171,4 +173,6 @@ reg index i.URBRURAL i.year2 i.URBRURAL##i.year2
 
 *Exporter le tableau de régression
 outreg2 using myreg.doc, replace ctitle (Model1)
+
+*Régression avec effets cohortes
 
