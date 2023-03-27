@@ -23,7 +23,7 @@ rename v56 fruit
 rename v57 driving
 
 *Générer une variable année
-gen year = "2000"
+gen year = "2010"
 
 *Créer un index de sensibilité environnementale avec 3 variables
 gen index =.
