@@ -158,6 +158,11 @@ graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
 *MERGING DES 2 BASES
 append using données2010_cleaned
 
+*Sauvegarder la base merged
+save Base_merged, replace
+dir
+
+
 *REGRESSION AVEC INTERACTION
 
 *Régression avec effets année
