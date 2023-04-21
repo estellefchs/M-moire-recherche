@@ -67,20 +67,23 @@ graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
 
 
 
-*VARIABLES DE CONTROLE
+*REGRESSION
 
+asdoc reg index i.URBRURAL SEX AGE EDUCYRS DE_RINC if SEX<3 & AGE<100 & EDUCYRS<95 & DE_RINC<10001
+
+*VARIABLES DE CONTROLE
+*On doit enlever certaines valeurs pour les variables de contrôle car le codage des variables est particulier et peut créer des biais dans la régression :
+label list SEX
+label list AGE
 label list EDUCYRS
 *Lorsqu'on regarde la variable EDUCYRS donc le nombre d'années d'éducation, on se rend compte que les valeurs supérieures ou égales à 95 signifient que la personne est encore à l'école ou qu'elle n'a pas répondu
+*Nous avons décidé d'enlever de la régression toutes les personnes encore à l'école, à l'université ou autre
 label list DE_RIC
 *Lorsqu'on regarde la variable DE_RINC donc le revenu personnel, on se rend compte que les valeurs supérieures à 10 000 signifient que la personne n'a pas répondu
 *Nous pouvons donc exclure de nos régressions ces valeurs
 
 
 
-
-*REGRESSION
-
-asdoc reg index i.URBRURAL SEX AGE EDUCYRS DE_RINC if EDUCYRS<95 & DE_RINC<10001
 
 ________________
 *Base de 1993
