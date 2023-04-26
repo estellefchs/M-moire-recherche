@@ -96,7 +96,7 @@ graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
 
 
 
-*REGRESSION
+*REGRESSION SIMPLE POUR 2010 
 
 asdoc reg index i.URBRURAL SEX AGE EDUCYRS revenu if SEX<3 & AGE<100 & EDUCYRS<95 & revenu<22
 
@@ -208,24 +208,21 @@ graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
 append using données2010_cleaned
 
 
-*REGRESSION AVEC INTERACTION
-
-*Régression avec effets année
+*REGRESSION AVEC INTERACTION LIEU DE VIE X ANNÉE
 asdoc reg index i.URBRURAL i.year2 i.URBRURAL##i.year2 SEX AGE revenu if SEX<3 & AGE<100 & revenu<22
 
-*Pas sur que ce soit nécessaire ça du coup ? ca marche avec asdoc j'ai l'impression
-*Exporter le tableau de régression
-*outreg2 using myreg.doc, replace ctitle (Model1)
+*REGRESSION AVEC INTERACTION LIEU DE VIE X COHORTE
 
-
-
-
----------
-
-*GENERATIONS 
-
+*Création des cohortes 
 gen generation = 0
 replace generation = 4 if BIRTH>1977 | BIRTH1993>1977
 replace generation = 1 if BIRTH<=1927 | BIRTH1993<=1927
 replace generation = 2 if BIRTH>1927 & BIRTH<=1952 | BIRTH1993>1927 & BIRTH1993<=1952
 replace generation = 3 if BIRTH>1952 & BIRTH<=1977 | BIRTH1993>1952 & BIRTH1993<=1977
+
+*Régression
+asdoc reg index i.URBRURAL i.generation i.URBRURAL##i.generation
+
+
+
+
