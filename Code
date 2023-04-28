@@ -1,4 +1,3 @@
-_______________
 *Base de 2010
 
 use "/Users/estellefuchs/Library/Mobile Documents/com~apple~Pages/Documents/Recherche Econométrie L3/Mémoire/données.dta/données2010.dta"
@@ -40,9 +39,14 @@ replace index= index+2 if driving==3
 replace index= index+3 if driving==2
 replace index= index+4 if driving==1
 
+*Comment est distribuée cette variable index ?
+hist index
+*On voit qu'elle semble suivre une loi normale
+
 *Créer une variable binaire (1 si Est, 0 si Ouest)
 gen Est=0
 replace Est=1 if DE_REG==11 | DE_REG==12 | DE_REG==13 | DE_REG==15 | DE_REG==14 | DE_REG==16
+
 
 *On va recoder la variable du revenu pour avoir plusieurs groupes (cela nous permettra, une fois qu'on assemblera les deux bases, d'avoir des variables codées de manière similaire)
 gen revenu =.
@@ -72,7 +76,6 @@ replace revenu= 99 if DE_RINC>900000
 
 
 
-
 *Sauvergarder la base nettoyée
 save données2010_cleaned, replace
 
@@ -84,19 +87,17 @@ save données2010_cleaned, replace
 tabulate URBRURAL, summarize (index)
 
 *Faire un tableau statistique pour observer la relation entre les sensibilité et urbanité
-graph hbar index, over(URBRURAL, sort(order)) ytitle("Index de sensibilité") title("Moyenne de l'index selon le degré d'urbanité" , size(medium)) blabel(bar, format(%9.0g))
+graph hbar index, over(URBRURAL, sort(order)) ytitle("Index de sensibilité") title("Fig1 : Moyenne de l'index selon le degré d'urbanité en 2010" , size(small)) blabel(bar, format(%9.0g))
 
 *Faire un tableau statistique pour observer la relation entre sensibilité et vivre à l'Est
-graph hbar index, over(Est, sort(order)) ytitle("Index de sensibilité") title("Moyenne de l'index selon l'Est" , size(medium)) blabel(bar, format(%9.0g))
+graph hbar index, over(Est, sort(order)) ytitle("Index de sensibilité") title("Fig 3: Moyenne de l'index selon l'Est en 2010" , size(medium)) blabel(bar, format(%9.0g))
 
 *Boîtes à moustache
-graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
+graph box index, over(URBRURAL, sort(order)) box(1,color(navy)) ytitle("Index de sensibilité") title("Fig2 : Index de sensibilité selon le lieu d'habitation en 2010")
 
 
 
-
-
-*REGRESSION SIMPLE POUR 2010 
+*REGRESSION
 
 asdoc reg index i.URBRURAL SEX AGE EDUCYRS revenu if SEX<3 & AGE<100 & EDUCYRS<95 & revenu<22
 
@@ -107,12 +108,14 @@ label list AGE
 label list EDUCYRS
 *Lorsqu'on regarde la variable EDUCYRS donc le nombre d'années d'éducation, on se rend compte que les valeurs supérieures ou égales à 95 signifient que la personne est encore à l'école ou qu'elle n'a pas répondu
 *Nous avons décidé d'enlever de la régression toutes les personnes encore à l'école, à l'université ou autre
-label list revenu
-*Les valeurs supérieures à 22 signifient que la personne n'a pas répondu
+*Pour le revenu, les valeurs supérieures à 22 signifient que la personne n'a pas répondu
 *Nous pouvons donc exclure de nos régressions ces valeurs
 
 
-________________
+
+
+
+
 *Base de 1993
 clear
 use "/Users/estellefuchs/Library/Mobile Documents/com~apple~Pages/Documents/Recherche Econométrie L3/Mémoire/données.dta/données1993.dta" 
@@ -188,41 +191,53 @@ ssc install asdoc
 asdoc tab URBRURAL, replace
 
 
-
 *STATISTIQUES DESCRIPTIVES
 *Regarder le lien entre la variable URBRURAL et la variable index sans prendre en compte la pondération en 2010
 tabulate URBRURAL, summarize (index)
 
 *Faire un graphique pour observer la relation entre les 2 variables (sensibilité et urbanité)
-graph hbar index, over(URBRURAL, sort(order)) ytitle("Index de sensibilité") title("Moyenne de l'index selon le degré d'urbanité" , size(medium)) blabel(bar, format(%9.0g))
+graph hbar index, over(URBRURAL, sort(order)) ytitle("Index de sensibilité") title("Fig 4: Moyenne de l'index selon le degré d'urbanité en 1993" , size(medium)) blabel(bar, format(%9.0g))
 
 *Faire un graphique pour observer la relation entre Est et sensibilité
-graph hbar index, over(Est, sort(order)) ytitle("Index de sensibilité") title("Moyenne de l'index selon l'Est" , size(medium)) blabel(bar, format(%9.0g))
+graph hbar index, over(Est, sort(order)) ytitle("Index de sensibilité") title("Fig 5: Moyenne de l'index selon l'Est en 1993" , size(medium)) blabel(bar, format(%9.0g))
 
 *Boîtes à moustache
-graph box index, over(URBRURAL, sort(order)) box(1,color(navy))
+graph box index, over(URBRURAL, sort(order)) box(1,color(navy)) ytitle("Index de sensibilité") title("Fig6 : Index de sensibilité selon le lieu d'habitation en 1993")
 
--------------------
+
+
+
 
 *MERGING DES 2 BASES
 append using données2010_cleaned
 
 
-*REGRESSION AVEC INTERACTION LIEU DE VIE X ANNÉE
+*REGRESSION AVEC INTERACTION
+
+*Régression avec effets année
 asdoc reg index i.URBRURAL i.year2 i.URBRURAL##i.year2 SEX AGE revenu if SEX<3 & AGE<100 & revenu<22
 
-*REGRESSION AVEC INTERACTION LIEU DE VIE X COHORTE
 
-*Création des cohortes 
+*reg index i.URBRURAL SEX AGE revenu if SEX<3 & AGE<100 & revenu<22 
+* year2==1993 
+
+*Pas sur que ce soit nécessaire ça du coup ? ca marche avec asdoc j'ai l'impression
+*Exporter le tableau de régression
+*outreg2 using myreg.doc, replace ctitle (Model1)
+
+
+
+
+
+
+*GENERATIONS 
+
 gen generation = 0
 replace generation = 4 if BIRTH>1977 | BIRTH1993>1977
 replace generation = 1 if BIRTH<=1927 | BIRTH1993<=1927
 replace generation = 2 if BIRTH>1927 & BIRTH<=1952 | BIRTH1993>1927 & BIRTH1993<=1952
 replace generation = 3 if BIRTH>1952 & BIRTH<=1977 | BIRTH1993>1952 & BIRTH1993<=1977
 
-*Régression
-asdoc reg index i.URBRURAL i.generation i.URBRURAL##i.generation
 
-
-
-
+*REGRESSION
+asdoc reg index i.URBRURAL i.generation i.URBRURAL##i.generation, append
