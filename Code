@@ -9,7 +9,7 @@ clear
 cd "/Users/lizzylesaulnier/Desktop"
 
 *Importer la base de 2010
-use "/Users/estellefuchs/Library/Mobile Documents/com~apple~Pages/Documents/Recherche Econométrie L3/Mémoire/données.dta/données2010.dta"
+use "données2010.dta"
 
 *On garde les observations pour l'Allemagne, on enlève les variables spécifiques aux autres pays
 keep if c_alphan == "DE"
@@ -120,7 +120,7 @@ asdoc reg index i.URBRURAL SEX AGE EDUCYRS revenu if SEX<3 & AGE<100 & EDUCYRS<9
 
 *Importer la base de 1993
 clear
-use "/Users/estellefuchs/Library/Mobile Documents/com~apple~Pages/Documents/Recherche Econométrie L3/Mémoire/données.dta/données1993.dta" 
+use "données1993.dta" 
 
 *On ne veut garder que les observations pour l'Allemagne
 label list V3
