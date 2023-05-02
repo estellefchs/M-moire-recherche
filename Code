@@ -228,4 +228,6 @@ replace generation = 4 if BIRTH>1977 | BIRTH1993>1977
 replace generation = 1 if BIRTH<=1927 | BIRTH1993<=1927
 replace generation = 2 if BIRTH>1927 & BIRTH<=1952 | BIRTH1993>1927 & BIRTH1993<=1952
 replace generation = 3 if BIRTH>1952 & BIRTH<=1977 | BIRTH1993>1952 & BIRTH1993<=1977
+
+*Régression :
 asdoc reg index i.URBRURAL i.generation i.URBRURAL##i.generation, append
