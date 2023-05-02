@@ -126,6 +126,12 @@ use "/Users/estellefuchs/Library/Mobile Documents/com~apple~Pages/Documents/Rech
 label list V3
 keep if v3==2 | v3==3
 
+*Retirer les variables inutiles
+drop v1 v2
+
+*Retirer les variables avec que des NA
+drop v108 v109 v206 v207 v208 v209 v210 v211 v215 v216 v217 v218 v219 v223 v225 v226 v227 v228 v229 v230 v232 v233 v234 v235 v238 v239 v240 v241 v242 v243 v244 v245 v246 v247 v248 v249 v250 v251 v252 v254 v255 v256 v257 v258 v260 v261 v262 v263 v264 v265 v266 v267 v268 v268 v270 v271 v272 v273 v274 v275 v282 v283 v284 v285 v286 v288 v289 v290 v291 v292 v293 v294 v295 v296 v297 v298 v299 v300 v301 v302 v303 v304 v305 v307 v308 v309 v310 v311 v313 v314 v315 v316 v317 v318 v319 v320 v321 v322 v323 v324 v324 v325 v326 v327 v328 v330 v331 v333 v335 v337 v339 v341 v343 v344 v345 v346 v347 v348 v349 v350 v351 v352 v353 v354 v355 v356 v357 v359 v360 v361 v362 v363 v364 v365 v366 v367 v368 v370 v371 v372 v373 v374 v375 v376 v377 v378 v379 v381 v382 v383 v384 v385 v386 v387 v388 v389 v390 v391 v392 v393 v394 v395 v396 v397 v398 v399 v400 v401 v402 v403 v405 v406 v407 v408 v409 v410 v411 v412 v413 v414 v415 v416 v417 v418
+
 *Générer une variable qui donne l'année
 gen year= "1993"
 *Mettre la variable année au bon format
@@ -133,22 +139,18 @@ destring year, gen(year2)
 *Générer une variable qui donne l'année de naissance
 gen BIRTH1993 = 1993 - v201
 
-*Moyenne d'age
-mean v201
-
-*Genre
-tab v200
-
-*Régions
-tab v380
-
 *Retirer les variables inutiles
 drop v1 v2
 
 *Retirer les variables avec que des NA
 drop v108 v109 v206 v207 v208 v209 v210 v211 v215 v216 v217 v218 v219 v223 v225 v226 v227 v228 v229 v230 v232 v233 v234 v235 v238 v239 v240 v241 v242 v243 v244 v245 v246 v247 v248 v249 v250 v251 v252 v254 v255 v256 v257 v258 v260 v261 v262 v263 v264 v265 v266 v267 v268 v268 v270 v271 v272 v273 v274 v275 v282 v283 v284 v285 v286 v288 v289 v290 v291 v292 v293 v294 v295 v296 v297 v298 v299 v300 v301 v302 v303 v304 v305 v307 v308 v309 v310 v311 v313 v314 v315 v316 v317 v318 v319 v320 v321 v322 v323 v324 v324 v325 v326 v327 v328 v330 v331 v333 v335 v337 v339 v341 v343 v344 v345 v346 v347 v348 v349 v350 v351 v352 v353 v354 v355 v356 v357 v359 v360 v361 v362 v363 v364 v365 v366 v367 v368 v370 v371 v372 v373 v374 v375 v376 v377 v378 v379 v381 v382 v383 v384 v385 v386 v387 v388 v389 v390 v391 v392 v393 v394 v395 v396 v397 v398 v399 v400 v401 v402 v403 v405 v406 v407 v408 v409 v410 v411 v412 v413 v414 v415 v416 v417 v418
- 
-*Renommer les variables d'intérêt
+
+*Regarder la distribution de certaines variables (âge, genre, régions)
+mean v201
+tab v200
+tab v380
+
+*Renommer les variables d'intérêt qui sont communes aux deux bases
 rename v3 country
 rename v380 DE_REG
 rename v56 glass
@@ -191,8 +193,8 @@ ssc install asdoc
 
 asdoc tab URBRURAL, replace
 
+***STATISTIQUES DESCRIPTIVES***
 
-*STATISTIQUES DESCRIPTIVES
 *Regarder le lien entre la variable URBRURAL et la variable index sans prendre en compte la pondération en 2010
 tabulate URBRURAL, summarize (index)
 
@@ -213,7 +215,7 @@ graph box index, over(URBRURAL, sort(order)) box(1,color(navy)) ytitle("Index de
 *Merging des 2 bases
 append using données2010_cleaned
 
-***REGRESSION***
+***REGRESSIONS AVEC INTERACTIONS***
 
 *Régression avec effets année
 asdoc reg index i.URBRURAL i.year2 i.URBRURAL##i.year2 SEX AGE revenu if SEX<3 & AGE<100 & revenu<22
